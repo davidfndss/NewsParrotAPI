@@ -5,7 +5,7 @@ const createRepository = (body) => {
 }
 
 const findAllRepository = (offset, limit) => {
-  return News.find().sort({ _id: -1 }).skip(offset).limit(limit).populate("user")
+  return News.find().sort({ date: -1 }).skip(offset).limit(limit).populate("user")
 }
 
 const countNewsRepository = () => {

@@ -3,9 +3,7 @@ import { createService, findAllService, findByIdService, updateService } from ".
 const create = async (req, res) => {
   const body = req.body;
   try {
-
     const user = await createService(body)
-
     res.status(201).send(user)
   } catch (err) {
     res.status(500).send({ message: err.message })

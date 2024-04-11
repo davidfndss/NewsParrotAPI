@@ -16,7 +16,6 @@ const updateRepository = (id, name, username, email, password, avatar, backgroun
    return User.findOneAndUpdate({ _id: id },{ name, username, email, password, avatar, background })
 }
 
-
 export {
   createRepository,
   findAllRepository,
