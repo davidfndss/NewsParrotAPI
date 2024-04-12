@@ -1,7 +1,14 @@
-import { createService, findAllService, findByIdService, updateService } from "../services/userService.js"
+import { validData } from "../middlewares/userMiddlewares.js";
+import { createService, findAllService, checkUsernameService, findByIdService, updateService } from "../services/userService.js"
 
 const create = async (req, res) => {
   const body = req.body;
+  const validation = validData(body)
+  
+  if( validation.length > 0) {
+    return res.status(400).send({ errors: validation })
+  }
+
   try {
     const user = await createService(body)
     res.status(201).send(user)
@@ -19,6 +26,20 @@ const findAll = async (req, res) => {
   }
 }
 
+const checkUsername =  async (req, res) => {
+  const { username } = req.body
+  try {
+    const user = await checkUsernameService(username)
+    if(user) {
+      res.send({ usernameAvailable: false })
+    } else {
+      res.send({ usernameAvailable: true })
+    }
+  } catch (err) {
+    res.status(500).send({ message: err.message })
+  }
+}
+
 const findById = async (req, res) => {
   const { id } = req.params
   try {
@@ -33,6 +54,8 @@ const update = async (req, res) => {
   const loggedUserId = req.userId
   const userIdToUpdate = req.id
   const body = req.body
+
+  validData(body)
   
   try {
     const successMsg = await updateService(loggedUserId, userIdToUpdate, body) 
@@ -42,4 +65,4 @@ const update = async (req, res) => {
   }
 }
 
-export { create, findAll, findById, update }
+export { create, findAll, checkUsername, findById, update }

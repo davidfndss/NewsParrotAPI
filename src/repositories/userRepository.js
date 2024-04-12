@@ -8,6 +8,14 @@ const findAllRepository = () => {
   return User.find()
 }
 
+const checkUsernameRepository = (username) => {
+  return User.findOne({ username })
+}
+
+const checkEmailRepository = (email) => {
+  return User.findOne({ email })
+}
+
 const findByIdRepository = (id) => {
   return User.findById(id)
 }
@@ -19,6 +27,8 @@ const updateRepository = (id, name, username, email, password, avatar, backgroun
 export {
   createRepository,
   findAllRepository,
+  checkUsernameRepository,
+  checkEmailRepository,
   findByIdRepository,
   updateRepository
 }

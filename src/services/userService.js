@@ -1,22 +1,49 @@
-import { createRepository, findAllRepository, findByIdRepository, updateRepository } from "../repositories/userRepository.js"
+import { createRepository, findAllRepository, checkUsernameRepository, checkEmailRepository, findByIdRepository, updateRepository } from "../repositories/userRepository.js"
 import { generateToken } from "./authService.js"
 
 const createService = async (body) => {
   const { name, username, email, password, avatar, background } = body;
   if (!name || !username || !email || !password) throw new Error("Preencha todos os campos para efetuar o registro")
 
+  const existingUsername = await checkUsernameRepository( username )
+  if (existingUsername) throw new Error("Já existe outra conta com este nome de usuário")
+
+  const existingEmail = await checkEmailRepository( email )
+  if (existingEmail) throw new Error("Já existe outra conta com este E-mail")
+
   const user = await createRepository(body)
   if (!user) throw new Error("Não foi possível criar usuário")
 
   const token = generateToken(user._id)
 
-  return token
+  return {
+    message: "usuário registrado com sucesso",
+    user: {
+      id: user._id,
+      name,
+      username,
+      email,
+      avatar,
+      background,
+    },
+    token
+  }
 }
 
 const findAllService = async () => {
   const users = await findAllRepository()
   if (users.length == 0) throw new Error("Não existe usuários cadastrados")
   return users
+}
+
+const checkUsernameService = async (username) =>  {
+  const user = await checkUsernameRepository(username)
+  return user
+
+}
+const checkEmailService = async (email) =>  {
+  const user = await checkEmailRepository(email)
+  return user
 }
 
 const findByIdService = async (id) => {
@@ -40,4 +67,4 @@ const updateService = async (loggedUserId, userIdToUpdate, body) => {
   return { updatedUser, message: "Usuário atualizado com sucesso" }
 }
 
-export { createService, findAllService, findByIdService, updateService }
+export { createService, findAllService, checkUsernameService, checkEmailService, findByIdService, updateService }
