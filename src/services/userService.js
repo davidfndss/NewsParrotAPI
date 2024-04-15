@@ -37,10 +37,14 @@ const findAllService = async () => {
 }
 
 const checkUsernameService = async (username) =>  {
+  if (username.length < 3) {
+    return { usernameAvailable: false }
+  }
+
   const user = await checkUsernameRepository(username)
   return user
-
 }
+
 const checkEmailService = async (email) =>  {
   const user = await checkEmailRepository(email)
   return user
