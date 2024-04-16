@@ -1,5 +1,5 @@
 import { validData } from "../middlewares/userMiddlewares.js";
-import { createService, findAllService, checkUsernameService, findByIdService, updateService } from "../services/userService.js"
+import { createService, findAllService, checkUsernameService, checkEmailService, findByIdService, updateService } from "../services/userService.js"
 
 const create = async (req, res) => {
   const body = req.body;
@@ -38,6 +38,20 @@ const checkUsername =  async (req, res) => {
   } catch (err) {
     res.status(500).send({ message: err.message })
   }
+
+}
+const checkEmail =  async (req, res) => {
+  const { email } = req.body
+  try {
+    const user = await checkEmailService(email)
+    if(user) {
+      res.send({ emailAvailable: false })
+    } else {
+      res.send({ emailAvailable: true })
+    }
+  } catch (err) {
+    res.status(500).send({ message: err.message })
+  }
 }
 
 const findById = async (req, res) => {
@@ -65,4 +79,4 @@ const update = async (req, res) => {
   }
 }
 
-export { create, findAll, checkUsername, findById, update }
+export { create, findAll, checkUsername, checkEmail, findById, update }

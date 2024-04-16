@@ -40,7 +40,6 @@ const checkUsernameService = async (username) =>  {
   if (username.length < 3) {
     return { usernameAvailable: false }
   }
-
   const user = await checkUsernameRepository(username)
   return user
 }
