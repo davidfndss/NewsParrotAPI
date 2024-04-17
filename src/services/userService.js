@@ -24,7 +24,7 @@ const createService = async (body) => {
       username,
       email,
       avatar,
-      background,
+      background
     },
     token
   }
@@ -49,9 +49,24 @@ const checkEmailService = async (email) =>  {
   return user
 }
 
-const findByIdService = async (id) => {
-    const user = await findByIdRepository(id)
+const findByIdService = async (paramsId, userId) => {
+  
+  if (!paramsId) throw new Error("Envie um id pelos parâmetros para buscar pelo usuário")
+
+  const user = await findByIdRepository(paramsId)
+  if (!user) throw new Error("Usuário não encontrado")
+  
+  if(!userId || paramsId === userId) {
     return user
+  } else {
+    // If its not the Own user searching, the response will contain only the fields: id, username, avatar and background
+    return {
+      id: user._id,
+      username: user.username, 
+      avatar: user.avatar, 
+      background: user.background
+    }
+  } 
 }
 
 const updateService = async (loggedUserId, userIdToUpdate, body) => {

@@ -11,7 +11,7 @@ router.get("/", authMiddleware, findAll) // Return an Array with all Users found
 router.post("/check-username", checkUsername) // Checks if the username is available, returns boolean
 router.post("/check-email", checkEmail) // Checks if the email is available, returns boolean
 
-router.get("/:id", validId, validUser, findById) // Return the user with the _id corresponding to the :id param
-router.patch("/:id", validId, validUser, authMiddleware, update) // Updates some fields of the user if approved on validation
+router.get("/findById/:id", authMiddleware, validId, validUser, findById) // Return the user with the _id corresponding to the :id param
+router.patch("/:id/update", validId, validUser, authMiddleware, update) // Updates some fields of the user if approved on validation
 
 export default router

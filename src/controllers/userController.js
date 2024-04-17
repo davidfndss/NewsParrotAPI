@@ -55,9 +55,11 @@ const checkEmail =  async (req, res) => {
 }
 
 const findById = async (req, res) => {
-  const { id } = req.params
   try {
-    const user = await findByIdService(id)
+    const user = await findByIdService(
+      req.params.id, 
+      String(req.userId)
+    )
     res.send(user)
   } catch (err) {
     res.status(500).send({message: err.message })
