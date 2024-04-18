@@ -14,7 +14,12 @@ const loginService = async (email, password) => {
     if(passwordIsValid === false) throw new Error("E-mail ou senha inválidos") 
   
     const token = generateToken(user.id)
-    return token
+    return {
+      token: token,
+      user: {
+          id: user._id
+      }
+    }
 }
 
 export { loginService, generateToken }
