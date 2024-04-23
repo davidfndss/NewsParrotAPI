@@ -1,5 +1,5 @@
 import { validData } from "../middlewares/userMiddlewares.js";
-import { createService, findAllService, checkUsernameService, checkEmailService, findByIdService, updateService } from "../services/userService.js"
+import { createService, findAllService, checkUsernameService, checkEmailService, findByIdService, findByUsernameService, updateService } from "../services/userService.js"
 
 const create = async (req, res) => {
   const body = req.body;
@@ -29,17 +29,13 @@ const findAll = async (req, res) => {
 const checkUsername =  async (req, res) => {
   const { username } = req.body
   try {
-    const user = await checkUsernameService(username)
-    if(user) {
-      res.send({ usernameAvailable: false })
-    } else {
-      res.send({ usernameAvailable: true })
-    }
+    const response = await checkUsernameService(username)
+    res.send(response)
   } catch (err) {
     res.status(500).send({ message: err.message })
   }
-
 }
+
 const checkEmail =  async (req, res) => {
   const { email } = req.body
   try {
@@ -66,6 +62,15 @@ const findById = async (req, res) => {
   }
 }
 
+const findByUsername = async (req, res) => {
+  try {
+    const user = await findByUsernameService(req.params.username)
+    res.send(user)
+  } catch (err) {
+    res.status(500).send({message: err.message })
+  }
+}
+
 const update = async (req, res) => {
   const loggedUserId = req.userId
   const userIdToUpdate = req.id
@@ -81,4 +86,4 @@ const update = async (req, res) => {
   }
 }
 
-export { create, findAll, checkUsername, checkEmail, findById, update }
+export { create, findAll, checkUsername, checkEmail, findById, findByUsername, update }

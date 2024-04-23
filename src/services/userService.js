@@ -1,4 +1,4 @@
-import { createRepository, findAllRepository, checkUsernameRepository, checkEmailRepository, findByIdRepository, updateRepository } from "../repositories/userRepository.js"
+import { createRepository, findAllRepository, findByUsernameRepository, checkEmailRepository, findByIdRepository, updateRepository } from "../repositories/userRepository.js"
 import { generateToken } from "./authService.js"
 
 const createService = async (body) => {
@@ -40,8 +40,13 @@ const checkUsernameService = async (username) =>  {
   if (username.length < 3) {
     return { usernameAvailable: false }
   }
-  const user = await checkUsernameRepository(username)
-  return user
+  const user = await findByUsernameRepository(username)
+  
+  if(user) {
+    return({ usernameAvailable: false })
+  } else {
+    return({ usernameAvailable: true })
+  }
 }
 
 const checkEmailService = async (email) =>  {
@@ -69,6 +74,23 @@ const findByIdService = async (paramsId, userId) => {
   } 
 }
 
+const findByUsernameService = async (username) => {
+  
+  if (!username) throw new Error("Envie um nome de usuário pelos parâmetros para buscar pelo usuário")
+
+  const user = await findByUsernameRepository(username)
+  if (!user) throw new Error("Usuário não encontrado")
+  
+  // If its not the Own user searching, the response will contain only the fields: id, username, avatar and background
+  return {
+    id: user._id,
+    username: user.username, 
+    avatar: user.avatar, 
+    background: user.background
+  }
+  
+}
+
 const updateService = async (loggedUserId, userIdToUpdate, body) => {
   if (String(loggedUserId) !== userIdToUpdate) throw new Error("Você não possui permissão para atualizar este usuário")
   const {name, username, email, password, avatar, background} = body
@@ -85,4 +107,4 @@ const updateService = async (loggedUserId, userIdToUpdate, body) => {
   return { updatedUser, message: "Usuário atualizado com sucesso" }
 }
 
-export { createService, findAllService, checkUsernameService, checkEmailService, findByIdService, updateService }
+export { createService, findAllService, checkUsernameService, checkEmailService, findByIdService, findByUsernameService, updateService }
