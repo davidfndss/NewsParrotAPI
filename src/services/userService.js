@@ -1,4 +1,4 @@
-import { createRepository, findAllRepository, findByUsernameRepository, checkEmailRepository, findByIdRepository, updateRepository } from "../repositories/userRepository.js"
+import { createRepository, findAllRepository, findByUsernameRepository, checkEmailRepository, checkUsernameRepository, findByIdRepository, updateRepository } from "../repositories/userRepository.js"
 import { generateToken } from "./authService.js"
 
 const createService = async (body) => {

@@ -182,7 +182,7 @@ const likeNewsService = async (newsId, userId, username) => {
 
     if (!newsLiked) {
       await dislikeNewsRepository(newsId);
-      throw new Error("Curtida removida com sucesso!")
+      return { message:"Curtida removida com sucesso!"}
     };
     
     return { message: "Notícia curtida com sucesso!" }
