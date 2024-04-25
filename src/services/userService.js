@@ -1,11 +1,11 @@
-import { createRepository, findAllRepository, findByUsernameRepository, checkEmailRepository, checkUsernameRepository, findByIdRepository, updateRepository } from "../repositories/userRepository.js"
+import { createRepository, findAllRepository, findByUsernameRepository, checkEmailRepository,  findByIdRepository, updateRepository } from "../repositories/userRepository.js"
 import { generateToken } from "./authService.js"
 
 const createService = async (body) => {
   const { name, username, email, password, avatar, background } = body;
   if (!name || !username || !email || !password) throw new Error("Preencha todos os campos para efetuar o registro")
 
-  const existingUsername = await checkUsernameRepository( username )
+  const existingUsername = await findByUsernameRepository( username )
   if (existingUsername) throw new Error("Já existe outra conta com este nome de usuário")
 
   const existingEmail = await checkEmailRepository( email )
