@@ -4,7 +4,7 @@ import { authMiddleware } from "../middlewares/authMiddlewares.js"
 
 const router = Router()
 
-router.post("/", authMiddleware, create) // Post news
+router.post("/add", authMiddleware, create) // Post news
 router.get("/", findAll) // Get news with pagination, Starts at (takeoff) and returns (limit) news
 router.get("/top", topNews) // Get the latest news posted
 

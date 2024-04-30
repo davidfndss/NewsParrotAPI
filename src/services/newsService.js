@@ -14,6 +14,8 @@ import {
   deleteCommentRepository
 } from "../repositories/newsRepository.js";
 
+import * as userRepository from "../repositories/userRepository.js"
+
 const createService = async (userId, title, text, banner) => {
   if (!userId || !title || !text || !banner)
     throw new Error("Preencha todos os campos antes de enviar post");
@@ -141,7 +143,7 @@ const searchByTitleService = async (title) => {
     if (news.length === 0) {
       return { message: "Não foi encontrada nenhuma notícia com esse título" }
     }
-  
+
     return {
       results: news.map((item) => ({
         id: item._id,
@@ -155,7 +157,7 @@ const searchByTitleService = async (title) => {
         userAvatar: item.user.avatar,
       }))
     }
-  
+
 };
 
 const findByUserIdService = async (id) => {
@@ -184,7 +186,7 @@ const likeNewsService = async (newsId, userId, username) => {
       await dislikeNewsRepository(newsId);
       return { message:"Curtida removida com sucesso!"}
     };
-    
+
     return { message: "Notícia curtida com sucesso!" }
 };
 
@@ -194,7 +196,17 @@ const addCommentService = async (newsId, userId, comment) => {
       throw new Error("Escreva uma mensagem para comentar")
     }
 
-    await addCommentRepository(newsId, userId, comment);
+    const user = await userRepository.findByIdRepository(userId)
+
+    const userStringified = JSON.stringify({
+      id: user._id,
+      username: user.username, 
+      avatar: user.avatar, 
+    })
+
+    if (!user) throw new Error("Usuário inválido")
+
+    await addCommentRepository(newsId, userId, comment, userStringified );
 
     return { message: "comentário adicionado com sucesso!" }
 }
@@ -202,7 +214,7 @@ const addCommentService = async (newsId, userId, comment) => {
 const deleteCommentService = async (newsId, commentId, userId) => {
   const news = await findByIdRepository(newsId)
   if (!news) throw new Error("Noticia inexistente")
-  
+
   const comment = news.comments.find( comment => comment.commentId === commentId )
 
   if (!comment || !commentId) throw new Error("Comentário inválido")

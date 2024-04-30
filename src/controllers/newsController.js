@@ -110,7 +110,6 @@ const addComment = async (req, res) => {
   const { comment } = req.body
   try {
     const successMsg = await addCommentService(newsId, userId, comment)
-    
     res.status(200).send(successMsg)
   } catch (err) {
     res.status(500).send({ message: err.message })

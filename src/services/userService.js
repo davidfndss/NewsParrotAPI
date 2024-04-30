@@ -1,4 +1,4 @@
-import { createRepository, findAllRepository, findByUsernameRepository, checkEmailRepository,  findByIdRepository, updateRepository } from "../repositories/userRepository.js"
+import { createRepository, findByUsernameRepository, checkEmailRepository,  findByIdRepository, updateRepository } from "../repositories/userRepository.js"
 import { generateToken } from "./authService.js"
 
 const createService = async (body) => {
@@ -28,12 +28,6 @@ const createService = async (body) => {
     },
     token
   }
-}
-
-const findAllService = async () => {
-  const users = await findAllRepository()
-  if (users.length == 0) throw new Error("Não existe usuários cadastrados")
-  return users
 }
 
 const checkUsernameService = async (username) =>  {
@@ -107,4 +101,4 @@ const updateService = async (loggedUserId, userIdToUpdate, body) => {
   return { updatedUser, message: "Usuário atualizado com sucesso" }
 }
 
-export { createService, findAllService, checkUsernameService, checkEmailService, findByIdService, findByUsernameService, updateService }
+export { createService,  checkUsernameService, checkEmailService, findByIdService, findByUsernameService, updateService }

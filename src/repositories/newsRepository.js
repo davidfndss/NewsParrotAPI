@@ -59,13 +59,13 @@ const dislikeNewsRepository = (newsId, userId) => {
   })
 }
 
-const addCommentRepository = (newsId, userId, comment) => {
+const addCommentRepository = (newsId, userId, comment, user) => {
   // manually generates an ID for the comment
   const commentId = Math.floor(Date.now() * Math.random()).toString(36)
 
   return News.findOneAndUpdate({ _id: newsId }, 
   { $push:
-    { comments: {  commentId, userId, comment, createdAt: new Date() } } 
+    { comments: {  commentId, userId, comment, user, createdAt: new Date() } } 
   })
 }
 
