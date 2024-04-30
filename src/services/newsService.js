@@ -200,6 +200,7 @@ const addCommentService = async (newsId, userId, comment) => {
 
     const userStringified = JSON.stringify({
       id: user._id,
+      name: user.name,
       username: user.username, 
       avatar: user.avatar, 
     })
