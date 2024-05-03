@@ -207,9 +207,9 @@ const addCommentService = async (newsId, userId, comment) => {
 
     if (!user) throw new Error("Usuário inválido")
 
-    await addCommentRepository(newsId, userId, comment, userStringified );
+    const response = await addCommentRepository(newsId, userId, comment, userStringified );
 
-    return { message: "comentário adicionado com sucesso!" }
+    return { message: "comentário adicionado com sucesso!", comment: response }
 }
 
 const deleteCommentService = async (newsId, commentId, userId) => {
