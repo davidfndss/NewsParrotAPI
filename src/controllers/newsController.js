@@ -1,4 +1,4 @@
-import { createService, findAllService, topNewsService, findByIdService, updateService, deleteByIdService, searchByTitleService, findByUserIdService, likeNewsService, addCommentService, deleteCommentService } from "../services/newsService.js"
+import { createService, findAllService, topNewsService, findByIdService, updateService, deleteByIdService, searchByTitleService, findByUserIdService,   findNewsByUsernameService, likeNewsService, addCommentService, deleteCommentService } from "../services/newsService.js"
 
 const create = async (req, res) => {
   const { title, text, banner } = req.body 
@@ -12,7 +12,7 @@ const create = async (req, res) => {
 }
 
 const findAll = async (req, res) => {
-    let { limit, offset } = req.query //gets the limit and offset values from the query params as strings
+    let { offset, limit } = req.query //gets the limit and offset values from the query params as strings
     const currentUrl = req.baseUrl
   try { 
     const news = await findAllService(offset, limit, currentUrl)
@@ -92,6 +92,18 @@ const findByUserId = async (req, res) => {
   }
 }
 
+const findNewsByUsernameController = async (req, res) => {
+  const { username } = req.params
+  try { 
+
+    const news = await findNewsByUsernameService(username)
+
+    return res.send(news)
+  } catch (err) {
+    res.status(500).send({ message: err.message })
+  }
+}
+
 const likeNews = async (req, res) => {
   const newsId = req.params.id
   const { userId, username } = req
@@ -128,4 +140,17 @@ const deleteComment = async (req, res) => {
   }
 }
 
-export { create, findAll, topNews, findById, update, deleteById, searchByTitle, findByUserId, likeNews, addComment, deleteComment }
+export { 
+  create, 
+  findAll, 
+  topNews, 
+  findById, 
+  update, 
+  deleteById, 
+  searchByTitle, 
+  findByUserId, 
+  findNewsByUsernameController,
+  likeNews, 
+  addComment, 
+  deleteComment 
+}

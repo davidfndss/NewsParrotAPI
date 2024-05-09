@@ -7,7 +7,7 @@ import {
   updateRepository,
   deleteByIdRepository,
   searchByTitleRepository,
-  findByUserIdRepository,
+  findByUserIdRepository, findNewsByUsernameRepository,
   likeNewsRepository,
   dislikeNewsRepository,
   addCommentRepository,
@@ -30,17 +30,17 @@ const createService = async (userId, title, text, banner) => {
   return News;
 };
 
-const findAllService = async (limit, offset, currentUrl) => {
+const findAllService = async (offset, limit, currentUrl) => {
   // offset == starter point, limit == maximum number of items.
   // convert the strings to numbers
-  limit = Number(limit);
   offset = Number(offset);
+  limit = Number(limit);
 
-  if (!limit) {
-    limit = 5;
-  }
   if (!offset) {
     offset = 0;
+  }
+  if (!limit) {
+    limit = 5;
   }
 
   const news = await findAllRepository(offset, limit);
@@ -59,8 +59,8 @@ const findAllService = async (limit, offset, currentUrl) => {
   return {
     nextUrl,
     previousUrl,
-    limit,
     offset,
+    limit,
     total,
     results: news.map((item) => ({
       id: item._id,
@@ -178,6 +178,24 @@ const findByUserIdService = async (id) => {
       })),
     }
 };
+const findNewsByUsernameService = async (username) => {
+
+    const news = await findNewsByUsernameRepository(username);
+
+    return {
+      results: news.map((item) => ({
+        id: item._id,
+        title: item.title,
+        text: item.text,
+        banner: item.banner,
+        likes: item.likes,
+        comments: item.comments,
+        name: item.user.name,
+        username: item.user.username,
+        userAvatar: item.user.avatar,
+      })),
+    }
+};
 
 const likeNewsService = async (newsId, userId, username) => {
     const newsLiked = await likeNewsRepository(newsId, userId, username);
@@ -236,6 +254,7 @@ export {
   deleteByIdService,
   searchByTitleService,
   findByUserIdService,
+  findNewsByUsernameService,
   likeNewsService,
   addCommentService,
   deleteCommentService,

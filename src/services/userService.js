@@ -58,9 +58,10 @@ const findByIdService = async (paramsId, userId) => {
   if(!userId || paramsId === userId) {
     return user
   } else {
-    // If its not the Own user searching, the response will contain only the fields: id, username, avatar and background
+    // If its not the Own user searching, the response will contain only the fields: id, name, username, avatar and background
     return {
       id: user._id,
+      name: user.name,
       username: user.username, 
       avatar: user.avatar, 
       background: user.background
@@ -75,9 +76,10 @@ const findByUsernameService = async (username) => {
   const user = await findByUsernameRepository(username)
   if (!user) throw new Error("Usuário não encontrado")
   
-  // If its not the Own user searching, the response will contain only the fields: id, username, avatar and background
+  // If its not the Own user searching, the response will contain only the fields: id, name, username, avatar and background
   return {
     id: user._id,
+    name: user.name,
     username: user.username, 
     avatar: user.avatar, 
     background: user.background
