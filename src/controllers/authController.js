@@ -6,7 +6,7 @@ const login = async (req, res) => {
     const logUserResponse = await loginService(email, password)
     res.status(200).send(logUserResponse)
   } catch (err) {
-    res.status(500).send({message: err.message})
+    res.status(err.statusCode).send({message: err.message})
   }
 }
 

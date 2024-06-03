@@ -13,7 +13,7 @@ const create = async (req, res) => {
     const user = await createService(body)
     res.status(201).send(user)
   } catch (err) {
-    res.status(500).send({ message: err.message })
+    res.status(err.statusCode).send({ message: err.message })
   }
 }
 
@@ -49,7 +49,7 @@ const findById = async (req, res) => {
     )
     res.send(user)
   } catch (err) {
-    res.status(500).send({message: err.message })
+    res.status(err.statusCode).send({message: err.message})
   }
 }
 
@@ -58,7 +58,7 @@ const findByUsername = async (req, res) => {
     const user = await findByUsernameService(req.params.username)
     res.send(user)
   } catch (err) {
-    res.status(500).send({message: err.message })
+    res.status(err.statusCode).send({message: err.message })
   }
 }
 
@@ -73,7 +73,7 @@ const update = async (req, res) => {
     const successMsg = await updateService(loggedUserId, userIdToUpdate, body) 
     res.send(successMsg)
   } catch (err) {
-    res.status(500).send({message: err.message })
+    res.status(err.statusCode).send({message: err.message })
   }
 }
 

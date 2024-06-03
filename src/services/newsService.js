@@ -7,7 +7,7 @@ import {
   updateRepository,
   deleteByIdRepository,
   searchByTitleRepository,
-  findByUserIdRepository, findNewsByUsernameRepository,
+  findByUserIdRepository,
   likeNewsRepository,
   dislikeNewsRepository,
   addCommentRepository,
@@ -16,9 +16,11 @@ import {
 
 import * as userRepository from "../repositories/userRepository.js"
 
+import { AppError } from "../utils/AppError.js"
+
 const createService = async (userId, title, text, banner) => {
   if (!userId || !title || !text || !banner)
-    throw new Error("Preencha todos os campos antes de enviar post");
+    throw new AppError(400, "Preencha todos os campos antes de enviar post");
 
   const News = await createRepository({
     user: userId,
@@ -110,9 +112,9 @@ const updateService = async (id, title, text, banner, userId) => {
 
   const news = await findByIdRepository(id);
 
-  if (!news ) throw new Error("Não foi possível atualizar a notícia");
+  if (!news) throw new AppError(500, "Não foi possível atualizar a notícia");
 
-  if (String(news.user._id) !== String(userId)) throw new Error("Você não possui autorização para atualizar essa notícia");
+  if (String(news.user._id) !== String(userId)) throw new AppError(401, "Você não possui autorização para atualizar essa notícia");
 
   const updatedNews = await updateRepository(id, title, text, banner);
 
@@ -122,11 +124,11 @@ const updateService = async (id, title, text, banner, userId) => {
 const deleteByIdService = async (id, userId) => {
   const news = await findByIdRepository(id);
   if (!news) {
-    throw new Error("Não foi possível encontrar a notícia")
+    throw new AppError(404, "Não foi possível encontrar a notícia")
   } else {
     if (String(news.user._id) !== String(userId)) {
 
-      throw new Error("Você não possui permissão para excluir essa notícia") 
+      throw new AppError(401, "Você não possui permissão para excluir essa notícia") 
     } else {
       await deleteByIdRepository(id);
       return {
@@ -141,7 +143,7 @@ const searchByTitleService = async (title) => {
     const news = await searchByTitleRepository(title);
 
     if (news.length === 0) {
-      return { message: "Não foi encontrada nenhuma notícia com esse título" }
+      throw new AppError(404, "Não foi encontrada nenhuma notícia com esse título")
     }
 
     return {
@@ -178,24 +180,6 @@ const findByUserIdService = async (id) => {
       })),
     }
 };
-const findNewsByUsernameService = async (username) => {
-
-    const news = await findNewsByUsernameRepository(username);
-
-    return {
-      results: news.map((item) => ({
-        id: item._id,
-        title: item.title,
-        text: item.text,
-        banner: item.banner,
-        likes: item.likes,
-        comments: item.comments,
-        name: item.user.name,
-        username: item.user.username,
-        userAvatar: item.user.avatar,
-      })),
-    }
-};
 
 const likeNewsService = async (newsId, userId, username) => {
     const newsLiked = await likeNewsRepository(newsId, userId, username);
@@ -211,7 +195,7 @@ const likeNewsService = async (newsId, userId, username) => {
 const addCommentService = async (newsId, userId, comment) => {
 
     if (!comment) {
-      throw new Error("Escreva uma mensagem para comentar")
+      throw new AppError(400, "Escreva uma mensagem para comentar")
     }
 
     const user = await userRepository.findByIdRepository(userId)
@@ -223,7 +207,7 @@ const addCommentService = async (newsId, userId, comment) => {
       avatar: user.avatar, 
     })
 
-    if (!user) throw new Error("Usuário inválido")
+    if (!user) throw new AppError(400, "Usuário inválido")
 
     const response = await addCommentRepository(newsId, userId, comment, userStringified );
 
@@ -232,13 +216,13 @@ const addCommentService = async (newsId, userId, comment) => {
 
 const deleteCommentService = async (newsId, commentId, userId) => {
   const news = await findByIdRepository(newsId)
-  if (!news) throw new Error("Noticia inexistente")
+  if (!news) throw new AppError(404, "Noticia inexistente")
 
   const comment = news.comments.find( comment => comment.commentId === commentId )
 
-  if (!comment || !commentId) throw new Error("Comentário inválido")
+  if (!comment || !commentId) throw new AppError(400, "Comentário inválido")
 
-  if (String(comment.userId) !== String(userId)) throw new Error("Você não pode deletar este comentário")
+  if (String(comment.userId) !== String(userId)) throw new AppError(401, "Você não pode deletar este comentário")
 
   await deleteCommentRepository( newsId, commentId, userId);
 
@@ -254,7 +238,6 @@ export {
   deleteByIdService,
   searchByTitleService,
   findByUserIdService,
-  findNewsByUsernameService,
   likeNewsService,
   addCommentService,
   deleteCommentService,

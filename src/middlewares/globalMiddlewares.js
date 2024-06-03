@@ -1,16 +1,17 @@
 import mongoose from "mongoose"
 import { findByIdService } from "../services/userService.js"
+import { AppError } from "../utils/AppError.js"
 
 // Validates the id
 const validId = ( req, res, next ) => {
   const { id } = req.params
   try {
     if(!mongoose.Types.ObjectId.isValid(id)){ // if id is invalid, return the message below
-      return res.status(400).send({ message: "Usuário inválido" })
+      throw new AppError(400, "Usuário inválido")
     }
     next()
   } catch (err) {
-    res.status(500).send({message: err.message})
+    res.status(err.statusCode).send({message: err.message})
   }
 }
 
@@ -20,14 +21,13 @@ const validUser = async ( req, res, next ) => {
   try {   
     const user = await findByIdService(id)
     
-    if(!user){return res.status(400).send({ message: "Usuário não encontrado" })}
+    if(!user) throw new AppError(404, "Usuário não encontrado")
   
     req.id = id
     req.user = user
-    
     next()
   } catch (err) {
-    res.status(500).send({message: err.message})
+    res.status(err.statusCode).send({message: err.message})
   }
 }
 

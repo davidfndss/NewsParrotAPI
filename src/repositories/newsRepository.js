@@ -44,10 +44,6 @@ const findByUserIdRepository = (id) => {
   return News.find({ user: id }).sort({_id: -1}).populate("user")
 }
 
-const findNewsByUsernameRepository = (username) => {
-  return News.find({ user: username }).sort({_id: -1}).populate("user")
-}
-
 const likeNewsRepository = (newsId, userId, username) => {
   return News.findOneAndUpdate({ _id: newsId, "likes.userId": { $nin: [userId] } }, // this filter dont let the user likes the post more than once
   { $push:
@@ -80,4 +76,4 @@ const deleteCommentRepository = (newsId, commentId, userId) => {
   })
 }
 
-export { createRepository, findAllRepository, countNewsRepository, findByIdRepository, updateRepository, deleteByIdRepository, topNewsRepository, searchByTitleRepository, findByUserIdRepository, findNewsByUsernameRepository, likeNewsRepository, dislikeNewsRepository, addCommentRepository, deleteCommentRepository }
+export { createRepository, findAllRepository, countNewsRepository, findByIdRepository, updateRepository, deleteByIdRepository, topNewsRepository, searchByTitleRepository, findByUserIdRepository, likeNewsRepository, dislikeNewsRepository, addCommentRepository, deleteCommentRepository }

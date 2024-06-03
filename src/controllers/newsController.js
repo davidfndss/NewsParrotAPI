@@ -1,4 +1,4 @@
-import { createService, findAllService, topNewsService, findByIdService, updateService, deleteByIdService, searchByTitleService, findByUserIdService,   findNewsByUsernameService, likeNewsService, addCommentService, deleteCommentService } from "../services/newsService.js"
+import { createService, findAllService, topNewsService, findByIdService, updateService, deleteByIdService, searchByTitleService, findByUserIdService, likeNewsService, addCommentService, deleteCommentService } from "../services/newsService.js"
 
 const create = async (req, res) => {
   const { title, text, banner } = req.body 
@@ -7,7 +7,7 @@ const create = async (req, res) => {
     const News = await createService(userId, title, text, banner)
     return res.status(200).send({ message: "Postado com sucesso", News: News })
   } catch (err) {
-    res.status(500).send({ message: err.message })
+    res.status(err.statusCode).send({ message: err.message })
   }
 }
 
@@ -18,7 +18,7 @@ const findAll = async (req, res) => {
     const news = await findAllService(offset, limit, currentUrl)
     return res.send(news)
   } catch (err) {
-    res.status(400).send({ message: err.message })
+    res.status(500).send({ message: err.message })
   }
 }
 
@@ -52,7 +52,7 @@ const update = async (req, res) => {
       news
     })
   } catch (err) {
-    res.status(500).send({ message: err.message })
+    res.status(err.statusCode).send({ message: err.message })
   }
 }
 
@@ -64,7 +64,7 @@ const deleteById = async (req, res) => {
 
     return res.send(successfulyDeletedMessage)
   } catch (err) {
-    res.status(500).send({message: err.message })
+    res.status(err.statusCode).send({message: err.message })
   }
 }
 
@@ -76,7 +76,7 @@ const searchByTitle = async (req, res) => {
 
     return res.send(news)
   } catch (err) {
-    res.status(500).send({ message: err.message })
+    res.status(err.statusCode).send({ message: err.message })
   }
 }
 
@@ -85,18 +85,6 @@ const findByUserId = async (req, res) => {
   try { 
 
     const news = await findByUserIdService(id)
-
-    return res.send(news)
-  } catch (err) {
-    res.status(500).send({ message: err.message })
-  }
-}
-
-const findNewsByUsernameController = async (req, res) => {
-  const { username } = req.params
-  try { 
-
-    const news = await findNewsByUsernameService(username)
 
     return res.send(news)
   } catch (err) {
@@ -124,7 +112,7 @@ const addComment = async (req, res) => {
     const successMsg = await addCommentService(newsId, userId, comment)
     res.status(200).send(successMsg)
   } catch (err) {
-    res.status(500).send({ message: err.message })
+    res.status(err.statusCode).send({ message: err.message })
   }
 }
 
@@ -136,7 +124,7 @@ const deleteComment = async (req, res) => {
     
     return res.send(successMsg)
   } catch (err) {
-    res.status(500).send({ message: err.message })
+    res.status(err.statusCode).send({ message: err.message })
   }
 }
 
@@ -149,7 +137,6 @@ export {
   deleteById, 
   searchByTitle, 
   findByUserId, 
-  findNewsByUsernameController,
   likeNews, 
   addComment, 
   deleteComment 
