@@ -51,10 +51,10 @@ Your API should now be running on http://localhost:3000 (or the port specified i
 Accessing the API
 Once the server is running, you can access the API endpoints using a tool like Postman or your browser. For example, to get the list of news, you might send a GET request to: 
 
-```http://localhost:3000/api/news```
+```http://localhost:3000/news```
 
 Accessing the Swagger Documentation
-If the API includes Swagger documentation, you can view it by navigating to:
+The API includes Swagger documentation, you can view it by navigating to:
 
 ```http://localhost:3000/doc```
 
