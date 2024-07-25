@@ -16,7 +16,7 @@ NewsParrot is an online news portal service, the api is actually hosted on Rende
 - **MongoDB Atlas**: MongoDB Atlas is an integrated suite of data services centered around a cloud database designed to accelerate and simplify how you build with data. You can acess it on [MongoDB official website](https://www.mongodb.com/products/platform/atlas-database)
 
 ### Step 1: Clone the Repository
-First, clone the NewsParrot API repository from GitHub (replace `<repository-url>` with the actual URL of the repository if available).
+First, clone the NewsParrot API repository from GitHub.
 
 ```bash 
 git clone https://github.com/davidfndss/NewsParrotAPI
@@ -59,3 +59,10 @@ The API includes Swagger documentation, you can view it by navigating to:
 ```http://localhost:3000/doc```
 
 This setup should get you started with running the NewsParrot API locally. Be sure to replace the enviroment variables with actual values specific to your project.
+
+### Stack used on the project:
+![Node js](https://img.shields.io/badge/node.js-%234ea94b.svg?style=for-the-badge&logo=node.js&logoColor=white)&nbsp;
+![Express](https://img.shields.io/badge/express-gray?style=for-the-badge&logo=express&logoColor=white)&nbsp;
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)&nbsp;
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)&nbsp;
+![Zod](https://img.shields.io/badge/zod-%233068b7.svg?style=for-the-badge&logo=zod&logoColor=white)
